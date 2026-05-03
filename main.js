@@ -148,4 +148,31 @@
       }
     });
   }
+
+  // Global copyIP function for hero buttons
+  window.copyIP = function(btn) {
+    var ipEl = document.getElementById("server-ip-hero");
+    if (ipEl) {
+      var text = ipEl.textContent.trim();
+      var originalText = btn.textContent;
+      function done() {
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(function () {
+          btn.textContent = originalText;
+          // Keep the copied class for permanent color change
+          // btn.classList.remove("copied");
+          // Navigate after feedback
+          document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
+        }, 2000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {
+          window.prompt("Copy this address:", text);
+        });
+      } else {
+        window.prompt("Copy this address:", text);
+      }
+    }
+  };
 })();
