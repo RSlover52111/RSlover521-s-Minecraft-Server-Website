@@ -56,13 +56,25 @@
             <p class="hero-embed-hint">A quick look at the vibes on the server.</p>
           </aside>
           <div class="hero-bar">
-            <div class="ip-strip ip-strip--hero-bar" role="group" aria-label="Server address">
-              <span class="ip-strip-label">Server IP</span>
-              <div class="ip-strip-row">
-                <code class="ip-strip-value js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
-                <button type="button" class="btn btn-ghost btn-small js-copy-ip" aria-label="Copy server IP">
-                  Copy IP
-                </button>
+            <div class="hero-bar-stack">
+              <div class="ip-strip ip-strip--hero-bar ip-strip--compact" role="group" aria-label="Server address">
+                <div class="ip-strip-row ip-strip-row--compact">
+                  <span class="ip-strip-label ip-strip-label--inline">Server IP</span>
+                  <code class="ip-strip-value js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
+                  <button type="button" class="btn btn-ghost btn-small js-copy-ip" aria-label="Copy server IP">
+                    Copy IP
+                  </button>
+                </div>
+              </div>
+              <div class="hero-version" role="region" aria-label="Quick join details">
+                <p class="hero-version-line">
+                  <strong>Version:</strong>
+                  <span class="js-version-label">Minecraft 1.20.1, Forge 47.4.0</span>
+                </p>
+                <p class="hero-version-hint">
+                  Java Edition · Install Forge &amp; modpack, then connect with
+                  <code class="hero-version-ip js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
+                </p>
               </div>
             </div>
             <div class="hero-actions">
@@ -79,20 +91,6 @@
           </div>
         </div>
       </section>
-
-      <!-- Quick join / version -->
-      <div class="quick-join" role="region" aria-label="Quick join details">
-        <div class="quick-join-inner">
-          <p class="quick-join-version">
-            <strong>Version:</strong>
-            <span class="js-version-label">Minecraft 1.20.1, Forge 47.4.0</span>
-          </p>
-          <p class="quick-join-hint">
-            Java Edition · Install Forge &amp; modpack, then connect with
-            <code class="quick-join-ip js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
-          </p>
-        </div>
-      </div>
 
       <!-- Cinematic carousel -->
       <section id="story" class="section showcase" aria-label="The network in pictures">
