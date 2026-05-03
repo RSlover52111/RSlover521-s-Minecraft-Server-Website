@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RSlover521's Minecraft Server</title>
+    <title>Living Rail Network · Forge 1.20.1 Create &amp; Trains</title>
     <meta
       name="description"
-      content="Join a modded Minecraft server built around Create, Steam and Rails, and more. Industrial builds, trains, and community survival."
+      content="A Minecraft Forge 1.20.1 survival server: Create automation, a real rail network, signals, stations, and live train tracking on your phone."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,282 +15,193 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script src="site-config.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
+    <!-- Configure server IP, live map, Discord, modpack URL, and versions in site-config.js -->
     <div class="noise" aria-hidden="true"></div>
+
     <header class="site-header">
-      <a class="logo" href="#top">RSlover521's <span class="logo-accent">Minecraft Server</span></a>
+      <a class="logo" href="#top">RSlover521 <span class="logo-accent">Rail Network</span></a>
       <nav class="nav" aria-label="Primary">
-        <a href="#features">Mods</a>
+        <a href="#story">Story</a>
+        <a href="#system">Why here</a>
+        <a href="#live-map">Live map</a>
         <a href="#join">Join</a>
         <a href="#community">Community</a>
       </nav>
-      <a class="btn btn-primary btn-small" href="#join">Play now</a>
+      <a class="btn btn-primary btn-small" data-link="live-map" href="#" target="_blank" rel="noopener noreferrer"
+        >Live map</a
+      >
     </header>
 
     <main id="top">
+      <!-- Hero -->
       <section class="hero">
         <div class="hero-bg" aria-hidden="true"></div>
-        <div class="hero-layout">
+        <div class="hero-layout hero-layout--single">
           <div class="hero-inner">
-            <p class="eyebrow">Modded survival · Create · Trains</p>
-            <h1 class="hero-title">
-              Build. <span class="gradient">Automate.</span><br />
-              <span class="gradient-alt">Create.</span>
-            </h1>
-            <p class="hero-lead">
-              A polished <strong>Create-based</strong> survival server for <strong>engineering</strong>, <strong>logistics</strong>, and <strong>exploration</strong>.
-            </p>
-            <div class="server-ip" style="margin: 10px">
-              <span class="ip-label">Server Address</span>
-            <div class="ip-box">
-              <code id="server-ip-hero">rslover521.duckdns.org:25566</code>
-              <button class="copy-btn" onclick="copyIP(this)">Copy IP</button>
+            <p class="eyebrow">Forge 1.20.1 · Create · Trains · Survival</p>
+            <h1 class="hero-title">A Living Rail Network in Minecraft</h1>
+            <p class="hero-lead">Build factories. Ride trains. Track them in real time.</p>
+
+            <div class="ip-strip" role="group" aria-label="Server address">
+              <span class="ip-strip-label">Server IP</span>
+              <div class="ip-strip-row">
+                <code class="ip-strip-value js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
+                <button type="button" class="btn btn-ghost btn-small js-copy-ip" aria-label="Copy server IP">
+                  Copy IP
+                </button>
               </div>
             </div>
+
             <div class="hero-actions">
-              <button class="btn btn-primary" onclick="copyIP(this)">Join Now</button>
-              <a class="btn btn-ghost" href="#features">See what’s included</a>
+              <a class="btn btn-primary" href="#join">Join Now</a>
+              <a
+                class="btn btn-ghost"
+                data-link="live-map"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                >View Live Map</a
+              >
             </div>
-            <dl class="hero-stats">
-              <div>
-                <dt>Focus</dt>
-                <dd>Tech &amp; trains</dd>
-              </div>
-              <div>
-                <dt>Style</dt>
-                <dd>Community survival</dd>
-              </div>
-              <div>
-                <dt>Vibe</dt>
-                <dd>Chill, no toxicity</dd>
-              </div>
-            </dl>
           </div>
-          <aside class="hero-embed" aria-label="Server preview video">
-            <p class="hero-embed-label">Server preview</p>
-            <div class="hero-embed-frame">
-              <video autoplay muted loop playsinline preload="metadata">
-                <source src="videos/bgvid.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <p class="hero-embed-hint">A quick look at the vibes on the server.</p>
-          </aside>
         </div>
       </section>
 
-      <section class="section showcase" aria-label="Server screenshots">
-        <div class="carousel-shell">
-          <div class="carousel" data-carousel role="region" aria-roledescription="carousel">
+      <!-- Quick join / version -->
+      <div class="quick-join" role="region" aria-label="Quick join details">
+        <div class="quick-join-inner">
+          <p class="quick-join-version">
+            <strong>Version:</strong>
+            <span class="js-version-label">Minecraft 1.20.1, Forge 47.4.0</span>
+          </p>
+          <p class="quick-join-hint">
+            Java Edition · Install Forge &amp; modpack, then connect with
+            <code class="quick-join-ip js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
+          </p>
+        </div>
+      </div>
+
+      <!-- Cinematic carousel -->
+      <section id="story" class="section showcase" aria-label="The network in pictures">
+        <div class="section-head section-head--center">
+          <h2>The Network, Frame by Frame</h2>
+          <p>From the first platform to the last signal—one continuous system.</p>
+        </div>
+        <div class="carousel-shell image-carousel">
+          <div class="image-carousel-inner carousel" data-carousel role="region" aria-roledescription="carousel">
             <div class="carousel-viewport">
               <p class="carousel-counter" data-carousel-counter>
                 <span class="carousel-counter-current">1</span>
                 <span class="carousel-counter-sep" aria-hidden="true">/</span>
-                <span class="carousel-counter-total">12</span>
+                <span class="carousel-counter-total">7</span>
               </p>
               <div class="carousel-track" data-carousel-track>
                 <figure class="carousel-slide">
                   <img
-                    src="images/slide-5.png"
-                    alt="Large modern Minecraft train station with glass facades, platforms, and autumn trees nearby."
+                    src="images/slide-6.png"
+                    alt="Clean underground metro platform with a modern train and station lighting."
                     width="1920"
                     height="1080"
                     decoding="async"
                     fetchpriority="high"
                   />
                   <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">
-                      A massive, fully detailed central transit hub built for scale and immersion.
-                    </h3>
-                    <p class="carousel-caption-text">
-                      Glass architecture, multi-level interiors, and active rail platforms bring your journeys to life.
-                      Whether you're commuting or exploring, this is the heart of the network.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-4.png"
-                    alt="Minecraft hangar with a biplane and a small wooden cabin in front of snowy forest and mountains."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Industrial builds meet creativity.</h3>
-                    <p class="carousel-caption-text">
-                      A custom aircraft hangar featuring a detailed plane build and functional-style workshop design.
-                      Perfect for players who love engineering, aviation, and immersive builds.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-3.png"
-                    alt="Long passenger train at a snowy Minecraft station during heavy fog and snowfall."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">A living, breathing transit system.</h3>
-                    <p class="carousel-caption-text">
-                      Trains arrive, depart, and connect regions across the world. Built with realism in mind, this
-                      system makes travel feel purposeful—not just fast.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-6.png"
-                    alt="Underground metro platform in Minecraft with a modern train and station lighting."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">
-                      A fully realized underground metro system built for speed, scale, and immersion.
-                    </h3>
-                    <p class="carousel-caption-text">
-                      Navigate a clean, modern transit network connecting key locations across the world—whether you're
-                      commuting, exploring, or planning your next big build.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-7.png"
-                    alt="Minecraft spawn hub metro station entrance with signage and autumn trees."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Your journey begins here.</h3>
-                    <p class="carousel-caption-text">
-                      Step into a carefully designed spawn hub featuring intuitive navigation, detailed architecture,
-                      and seamless access to the server’s core systems.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-8.png"
-                    alt="Minecraft forest path at night with lanterns and warm ambient lighting."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Adventure starts beyond the path.</h3>
-                    <p class="carousel-caption-text">
-                      Wander through beautifully crafted environments filled with rich terrain, ambient lighting, and
-                      hidden destinations waiting to be discovered.
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      Step into a fully realized metro system built for a living world.
                     </p>
                   </figcaption>
                 </figure>
                 <figure class="carousel-slide">
                   <img
                     src="images/slide-9.png"
-                    alt="Active Minecraft rail yard at night with multiple trains running on parallel tracks."
+                    alt="Rail yard at night with multiple trains on parallel tracks."
                     width="1920"
                     height="1080"
                     decoding="async"
                     loading="lazy"
                   />
                   <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">An active rail yard where multiple trains run simultaneously.</h3>
-                    <p class="carousel-caption-text">
-                      Routing, switching, and real infrastructure—this isn’t just decoration.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-10.png"
-                    alt="Detailed Minecraft station stairway leading down to platforms with modern lighting and walls."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Detailed stations designed for immersion—not just function.</h3>
-                    <p class="carousel-caption-text">
-                      From surface to platform, every part of the journey is built with care.
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      An active rail yard where multiple trains operate at once.
                     </p>
                   </figcaption>
                 </figure>
                 <figure class="carousel-slide">
                   <img
                     src="images/slide-11.png"
-                    alt="Minecraft railway junction at night with multiple tracks and signal posts controlling movement."
+                    alt="Railway junction at night with signals controlling several tracks."
                     width="1920"
                     height="1080"
                     decoding="async"
                     loading="lazy"
                   />
                   <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">A fully signaled railway system.</h3>
-                    <p class="carousel-caption-text">
-                      Every track, junction, and movement is controlled—just like a real network.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-12.png"
-                    alt="Minecraft station at night with multiple trains arriving and departing along a lit platform."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Trains arrive, depart, and connect across the world.</h3>
-                    <p class="carousel-caption-text">
-                      Stations aren’t static—they’re part of a living system.
-                    </p>
-                  </figcaption>
-                </figure>
-                <figure class="carousel-slide">
-                  <img
-                    src="images/slide-2.png"
-                    alt="Foggy winter shoreline in Minecraft with a small stone fort and warm light from an entrance."
-                    width="1920"
-                    height="1080"
-                    decoding="async"
-                    loading="lazy"
-                  />
-                  <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">Dynamic weather and atmosphere that changes how you play.</h3>
-                    <p class="carousel-caption-text">
-                      Brave the harsh winter conditions as snow and fog transform the landscape into a cinematic survival
-                      experience. Exploration feels different every time.
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      A fully signaled railway—every movement is controlled.
                     </p>
                   </figcaption>
                 </figure>
                 <figure class="carousel-slide">
                   <img
                     src="images/slide-1.png"
-                    alt="Night aerial view of a snow-covered Minecraft world with a brightly lit train station and aurora in the sky."
+                    alt="Aerial night view of snow-covered terrain with a lit rail interchange and station."
                     width="1920"
                     height="1080"
                     decoding="async"
                     loading="lazy"
                   />
                   <figcaption class="carousel-caption">
-                    <h3 class="carousel-caption-title">The world never sleeps.</h3>
-                    <p class="carousel-caption-text">
-                      A stunning aerial view of the server at night, showcasing glowing infrastructure and vast terrain.
-                      From above, you can truly see the scale of what’s been built.
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      Massive interchanges connect lines across the entire network.
+                    </p>
+                  </figcaption>
+                </figure>
+                <figure class="carousel-slide">
+                  <img
+                    src="images/slide-12.png"
+                    alt="Station platform at night with two trains alongside dual platforms."
+                    width="1920"
+                    height="1080"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                  <figcaption class="carousel-caption">
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      Trains arrive, depart, and connect players across the world.
+                    </p>
+                  </figcaption>
+                </figure>
+                <figure class="carousel-slide">
+                  <img
+                    src="images/slide-10.png"
+                    alt="Station stairwell leading down toward platforms with modern lighting."
+                    width="1920"
+                    height="1080"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                  <figcaption class="carousel-caption">
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      Every station is designed for immersion—from entrance to platform.
+                    </p>
+                  </figcaption>
+                </figure>
+                <figure class="carousel-slide">
+                  <img
+                    src="images/slide-8.png"
+                    alt="Forest path at night lined with warm lanterns."
+                    width="1920"
+                    height="1080"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                  <figcaption class="carousel-caption">
+                    <p class="carousel-caption-text carousel-caption-text--solo">
+                      Beyond the rails lies a world waiting to be explored.
                     </p>
                   </figcaption>
                 </figure>
@@ -320,105 +231,277 @@
               <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 5"></button>
               <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 6"></button>
               <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 7"></button>
-              <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 8"></button>
-              <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 9"></button>
-              <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 10"></button>
-              <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 11"></button>
-              <button type="button" class="carousel-dot" data-carousel-dot aria-label="Go to slide 12"></button>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="features" class="section features">
+      <!-- What makes this different -->
+      <section id="system" class="section features">
         <div class="section-head">
-          <h2>Why play here</h2>
+          <h2>Not Just a Server—A System</h2>
           <p>
-            Heavy on Create’s kinetic contraptions and Steam and Rails’ locomotives—plus supporting
-            mods chosen for performance and fun.
+            This is a living rail network with Create-powered trains, stations, signals, infrastructure, and tracking
+            you can open on your phone—not a generic modded lobby.
           </p>
         </div>
         <div class="feature-grid">
-          <article class="card card-feature">
+          <article class="feature-card card card-feature">
+            <div class="card-icon" aria-hidden="true">🛤</div>
+            <h3>Fully functional rail network</h3>
+            <p>Lines, yards, and junctions that behave like real infrastructure—not decoration.</p>
+          </article>
+          <article class="feature-card card card-feature">
             <div class="card-icon" aria-hidden="true">⚙</div>
-            <h3>Create</h3>
-            <p>
-              Gears, belts, and clever automation. Design real workshops and supply chains instead of
-              magic-block spam.
-            </p>
+            <h3>Create-powered automation</h3>
+            <p>Factories and mechanics that feed the world your trains move through.</p>
           </article>
-          <article class="card card-feature">
-            <div class="card-icon" aria-hidden="true">🚂</div>
-            <h3>Steam &amp; Rails</h3>
-            <p>
-              Haul cargo and friends across the world on tracks you lay yourself. Stations, schedules,
-              and satisfying train moments.
-            </p>
+          <article class="feature-card card card-feature">
+            <div class="card-icon" aria-hidden="true">📍</div>
+            <h3>Real-time train tracking</h3>
+            <p>Follow the network in-game and from your phone with the live map.</p>
           </article>
-          <article class="card card-feature">
-            <div class="card-icon" aria-hidden="true">✦</div>
-            <h3>Curated pack</h3>
-            <p>
-              Extra mods expand exploration, storage, and QoL without turning the server into a laggy
-              kitchen sink.
-            </p>
+          <article class="feature-card card card-feature">
+            <div class="card-icon" aria-hidden="true">🌍</div>
+            <h3>Persistent evolving world</h3>
+            <p>A survival map that grows with stations, industry, and player projects.</p>
           </article>
-          <article class="card card-feature">
-            <div class="card-icon" aria-hidden="true">◇</div>
-            <h3>Fair &amp; social</h3>
-            <p>
-              Clear rules, active staff, and room for solo builders and rail barons alike.
-            </p>
+          <article class="feature-card card card-feature">
+            <div class="card-icon" aria-hidden="true">👷</div>
+            <h3>Community-driven infrastructure</h3>
+            <p>Builders, engineers, and explorers shaping the network together.</p>
           </article>
         </div>
       </section>
 
+      <!-- Live map spotlight -->
+      <section id="live-map" class="section section-spotlight">
+        <div class="spotlight-layout">
+          <div class="spotlight-copy">
+            <h2>Track Your Train—In Real Time</h2>
+            <p>
+              Monitor the entire network live. See where trains are, plan your route, and stay connected—even from your
+              phone.
+            </p>
+            <div class="spotlight-actions">
+              <a
+                class="btn btn-primary"
+                data-link="live-map"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open Live Map</a
+              >
+            </div>
+          </div>
+          <div class="spotlight-media live-map-frame" data-live-map-frame>
+            <img
+              class="live-map-img"
+              data-live-map-img
+              src="images/live-map.png"
+              alt="Screenshot of the real-time rail map showing train positions on the network."
+              width="1200"
+              height="675"
+              decoding="async"
+              loading="lazy"
+            />
+            <p class="live-map-fallback" data-live-map-fallback hidden>
+              Add your live map screenshot as <code>images/live-map.png</code> (path set in <code>site-config.js</code>).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rail in action grid -->
+      <section class="section section-grid-rail" aria-label="Rail network in action">
+        <div class="section-head">
+          <h2>Rail Network in Action</h2>
+          <p>Stations, signals, consists, and the spaces between—built to be used.</p>
+        </div>
+        <div class="screenshot-grid">
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-5.png"
+                alt="Large modern station with glass facades and platforms."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">A central hub built for throughput and presence.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-7.png"
+                alt="Surface station entrance with signage and autumn trees."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">Arrivals start at entrances designed to orient you instantly.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-3.png"
+                alt="Passenger train at a snowy station in fog."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">Weather and atmosphere change how each run feels.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-4.png"
+                alt="Hangar with aircraft build and snowy forest backdrop."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">Industry and creativity side by side with the main line.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-2.png"
+                alt="Foggy winter shoreline with a small stone fort."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">Remote lines reach coasts, forts, and player-made destinations.</figcaption>
+          </figure>
+          <figure class="screenshot-card">
+            <div class="screenshot-card-media">
+              <img
+                src="images/slide-11.png"
+                alt="Nighttime signal gantry over converging tracks."
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="screenshot-card-caption">Signals choreograph movement where routes meet.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- World & exploration -->
+      <section class="section section-world" aria-label="Exploration beyond the railway">
+        <div class="world-split">
+          <div class="world-split-media">
+            <img
+              src="images/slide-8.png"
+              alt="Lantern-lit forest path at night for exploration beyond the station."
+              width="1920"
+              height="1080"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="world-split-copy">
+            <h2>Beyond the Rails</h2>
+            <p>
+              Explore a world full of survival builds, scenic paths, player projects, and destinations connected by rail.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- How to join -->
       <section id="join" class="section join">
         <div class="join-panel">
           <div class="join-copy">
-            <h2>Join the server</h2>
-            <p>
-              Install the modpack (link yours when ready), launch, and connect with the address below.
-              Whitelist or Discord steps go here if you use them.
-            </p>
-            <ul class="join-steps">
-              <li><span>1</span> Install the official modpack / launcher profile</li>
-              <li><span>2</span> Match the listed Minecraft &amp; mod loader version</li>
-              <li><span>3</span> Paste the server IP and hop in</li>
-            </ul>
+            <h2>How to Join</h2>
+            <p>Four steps from the launcher to your first platform.</p>
+            <ol class="join-steps join-steps--numbered">
+              <li><span aria-hidden="true">1</span> Install Forge for Minecraft 1.20.1</li>
+              <li><span aria-hidden="true">2</span> Download the modpack <span class="join-note">(link coming soon)</span></li>
+              <li><span aria-hidden="true">3</span> Join using the server IP below</li>
+              <li><span aria-hidden="true">4</span> Start your journey at spawn</li>
+            </ol>
+            <div class="join-inline-actions">
+              <a class="btn btn-primary" data-link="modpack" href="#">Download Modpack</a>
+              <button type="button" class="btn btn-ghost js-copy-ip">Copy IP</button>
+            </div>
           </div>
           <div class="join-box">
             <p class="join-label">Server address</p>
             <div class="ip-row">
-              <code id="server-ip" class="ip">rslover521.duckdns.org:25566</code>
-              <button type="button" class="btn btn-primary btn-copy" id="copy-ip" aria-label="Copy server address">
-                Copy
+              <code id="server-ip" class="ip js-server-ip" translate="no">rslover521.duckdns.org:25566</code>
+              <button type="button" class="btn btn-primary btn-copy js-copy-ip" aria-label="Copy server address">
+                Copy IP
               </button>
             </div>
+            <p class="join-hint">
+              Need the map?
+              <a data-link="live-map" href="#" target="_blank" rel="noopener noreferrer">Open the live rail map</a>.
+            </p>
             <div class="badges">
-              <span class="badge">Java Edition</span>
-              <span class="badge">Modded</span>
-              <span class="badge">Create + S&amp;R</span>
+              <span class="badge">Java</span>
+              <span class="badge">Forge <span class="js-forge-badge">47.4.0</span></span>
+              <span class="badge">MC <span class="js-mc-badge">1.20.1</span></span>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- Community -->
       <section id="community" class="section community">
-        <div class="section-head">
-          <h2>Community</h2>
-          <p>Share blueprints, rail lines, and factory tours. The best builds deserve an audience.</p>
+        <div class="cta-panel">
+          <h2>Join the Community</h2>
+          <p>
+            Looking for builders, engineers, explorers, and casual players who want to be part of a growing world.
+          </p>
+          <div class="cta-panel-actions">
+            <a
+              class="btn btn-primary"
+              data-link="discord"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Join Discord</a
+            >
+          </div>
         </div>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="https://discord.gg/zJguWKyjDt">Discord</a>
-          <a class="btn btn-ghost" href="#">Modpack / CurseForge</a>
+      </section>
+
+      <!-- Final CTA -->
+      <section class="section section-final-cta" aria-label="Call to action">
+        <div class="cta-panel cta-panel--final">
+          <h2>Join the Network. Build Something Bigger.</h2>
+          <div class="cta-panel-actions">
+            <a class="btn btn-primary" href="#join">Join Now</a>
+            <a
+              class="btn btn-ghost"
+              data-link="live-map"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open Live Map</a
+            >
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <p>Not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang Synergies AB.</p>
-      <p class="footer-meta">© <span id="year"></span> RSlover521's Minecraft Server</p>
+      <p class="footer-meta">© <span id="year"></span> RSlover521 Rail Network</p>
     </footer>
 
     <script src="main.js"></script>

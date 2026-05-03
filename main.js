@@ -1,8 +1,113 @@
 (function () {
+  var cfg =
+    typeof window.SITE_CONFIG === "object" && window.SITE_CONFIG !== null
+      ? window.SITE_CONFIG
+      : {
+          serverIp: "rslover521.duckdns.org:25566",
+          liveMapUrl: "http://rslover521.duckdns.org:3876",
+          discordUrl: "https://discord.gg/zJguWKyjDt",
+          modpackUrl: "#",
+          minecraftVersion: "1.20.1",
+          forgeVersion: "47.4.0",
+          liveMapImageSrc: "images/live-map.png",
+        };
+
+  function applySiteConfig() {
+    var ip = cfg.serverIp || "";
+    document.querySelectorAll(".js-server-ip").forEach(function (el) {
+      el.textContent = ip;
+    });
+
+    var verLabel = document.querySelector(".js-version-label");
+    if (verLabel && cfg.minecraftVersion && cfg.forgeVersion) {
+      verLabel.textContent = "Minecraft " + cfg.minecraftVersion + ", Forge " + cfg.forgeVersion;
+    }
+
+    var mcBadge = document.querySelector(".js-mc-badge");
+    if (mcBadge && cfg.minecraftVersion) {
+      mcBadge.textContent = cfg.minecraftVersion;
+    }
+    var forgeBadge = document.querySelector(".js-forge-badge");
+    if (forgeBadge && cfg.forgeVersion) {
+      forgeBadge.textContent = cfg.forgeVersion;
+    }
+
+    var linkMap = {
+      "live-map": cfg.liveMapUrl,
+      discord: cfg.discordUrl,
+      modpack: cfg.modpackUrl,
+    };
+    document.querySelectorAll("[data-link]").forEach(function (el) {
+      var key = el.getAttribute("data-link");
+      if (key && linkMap[key]) {
+        el.setAttribute("href", linkMap[key]);
+      }
+    });
+
+    var mapImg = document.querySelector("[data-live-map-img]");
+    if (mapImg && cfg.liveMapImageSrc) {
+      mapImg.src = cfg.liveMapImageSrc;
+    }
+  }
+
+  function initLiveMapFallback() {
+    var img = document.querySelector("[data-live-map-img]");
+    var fallback = document.querySelector("[data-live-map-fallback]");
+    var frame = document.querySelector("[data-live-map-frame]");
+    if (!img || !fallback || !frame) return;
+
+    function showFallback() {
+      img.style.display = "none";
+      fallback.hidden = false;
+      frame.classList.add("live-map-frame--fallback");
+    }
+
+    img.addEventListener("error", showFallback);
+    if (img.complete && img.naturalWidth === 0) {
+      showFallback();
+    }
+  }
+
+  function copyServerIp(triggerBtn) {
+    var ip = (cfg.serverIp || "").trim();
+    if (!ip) return;
+
+    function feedback() {
+      if (!triggerBtn) return;
+      var prev = triggerBtn.getAttribute("data-prev-label") || triggerBtn.textContent;
+      if (!triggerBtn.hasAttribute("data-prev-label")) {
+        triggerBtn.setAttribute("data-prev-label", prev);
+      }
+      triggerBtn.textContent = "Copied!";
+      triggerBtn.classList.add("copied");
+      window.setTimeout(function () {
+        triggerBtn.textContent = triggerBtn.getAttribute("data-prev-label") || "Copy IP";
+        triggerBtn.classList.remove("copied");
+      }, 2000);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ip).then(feedback).catch(function () {
+        window.prompt("Copy this address:", ip);
+      });
+    } else {
+      window.prompt("Copy this address:", ip);
+    }
+  }
+
   var yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
   }
+
+  applySiteConfig();
+  initLiveMapFallback();
+
+  document.querySelectorAll(".js-copy-ip").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      copyServerIp(btn);
+    });
+  });
 
   var carousels = document.querySelectorAll("[data-carousel]");
   if (carousels.length) {
@@ -80,16 +185,18 @@
         }, autoplayMs);
       }
 
-      if (btnPrev) btnPrev.addEventListener("click", function () {
-        go(-1);
-        stopAutoplay();
-        startAutoplay();
-      });
-      if (btnNext) btnNext.addEventListener("click", function () {
-        go(1);
-        stopAutoplay();
-        startAutoplay();
-      });
+      if (btnPrev)
+        btnPrev.addEventListener("click", function () {
+          go(-1);
+          stopAutoplay();
+          startAutoplay();
+        });
+      if (btnNext)
+        btnNext.addEventListener("click", function () {
+          go(1);
+          stopAutoplay();
+          startAutoplay();
+        });
 
       dots.forEach(function (dot, idx) {
         dot.addEventListener("click", function () {
@@ -125,54 +232,4 @@
       startAutoplay();
     });
   }
-
-  var copyBtn = document.getElementById("copy-ip");
-  var ipEl = document.getElementById("server-ip");
-  if (copyBtn && ipEl) {
-    copyBtn.addEventListener("click", function () {
-      var text = ipEl.textContent.trim();
-      function done() {
-        copyBtn.textContent = "Copied!";
-        copyBtn.classList.add("copied");
-        setTimeout(function () {
-          copyBtn.textContent = "Copy";
-          copyBtn.classList.remove("copied");
-        }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () {
-          window.prompt("Copy this address:", text);
-        });
-      } else {
-        window.prompt("Copy this address:", text);
-      }
-    });
-  }
-
-  // Global copyIP function for hero buttons
-  window.copyIP = function(btn) {
-    var ipEl = document.getElementById("server-ip-hero");
-    if (ipEl) {
-      var text = ipEl.textContent.trim();
-      var originalText = btn.textContent;
-      function done() {
-        btn.textContent = "Copied!";
-        btn.classList.add("copied");
-        setTimeout(function () {
-          btn.textContent = originalText;
-          // Keep the copied class for permanent color change
-          // btn.classList.remove("copied");
-          // Navigate after feedback
-          document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
-        }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () {
-          window.prompt("Copy this address:", text);
-        });
-      } else {
-        window.prompt("Copy this address:", text);
-      }
-    }
-  };
 })();
