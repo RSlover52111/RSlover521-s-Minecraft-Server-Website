@@ -180,7 +180,7 @@ a:hover {
   min-height: calc(100vh - var(--header-h));
   display: flex;
   align-items: center;
-  padding: clamp(2rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem) 4rem;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem) clamp(2.5rem, 5vw, 4rem);
 }
 
 .hero-bg {
@@ -215,19 +215,18 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  gap: 2rem;
-  align-items: center;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  align-items: start;
 }
 
 @media (min-width: 1024px) {
   .hero-layout {
     grid-template-columns: minmax(0, 1fr) minmax(380px, min(42vw, 560px));
-    gap: clamp(1.5rem, 3.5vw, 2.75rem);
-    align-items: start;
+    column-gap: clamp(1.5rem, 3.5vw, 2.75rem);
+    row-gap: clamp(1.5rem, 3vw, 2.25rem);
   }
 
-  /* Nudge copy left and keep the preview column a bit wider */
-  .hero-inner {
+  .hero-copy {
     max-width: min(36rem, 100%);
     margin-right: auto;
     justify-self: start;
@@ -235,9 +234,58 @@ a:hover {
   }
 }
 
-.hero-inner {
+.hero-copy {
   position: relative;
   max-width: 40rem;
+}
+
+/* Full-width row under headline + video (wireframe: IP + CTAs) */
+.hero-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 1.5rem;
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--radius);
+  background: rgba(7, 9, 14, 0.88);
+  border: 1px solid rgba(255, 200, 120, 0.14);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+.hero-bar .ip-strip--hero-bar {
+  margin: 0;
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  background: rgba(5, 7, 11, 0.65);
+  border: 1px solid rgba(61, 214, 255, 0.2);
+}
+
+.hero-bar .hero-actions {
+  flex: 0 0 auto;
+  margin: 0;
+  justify-content: flex-end;
+}
+
+@media (max-width: 1023px) {
+  .hero-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-bar .hero-actions {
+    justify-content: stretch;
+  }
+
+  .hero-bar .hero-actions .btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
+  }
 }
 
 .hero-embed {
@@ -342,7 +390,7 @@ a:hover {
 }
 
 .hero-lead {
-  margin: 0 0 2rem;
+  margin: 0;
   max-width: 540px;
   color: var(--text-muted);
   font-size: 1.2rem;
@@ -367,6 +415,10 @@ a:hover {
   background: rgba(7, 9, 14, 0.72);
   border: 1px solid rgba(61, 214, 255, 0.22);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.ip-strip--hero-bar {
+  box-shadow: none;
 }
 
 .ip-strip-label {
@@ -406,7 +458,7 @@ a:hover {
 .quick-join {
   position: relative;
   z-index: 2;
-  margin: -2rem clamp(1.25rem, 4vw, 3rem) 0;
+  margin: clamp(1rem, 2.5vw, 1.5rem) clamp(1.25rem, 4vw, 3rem) 0;
   padding: 0;
 }
 
