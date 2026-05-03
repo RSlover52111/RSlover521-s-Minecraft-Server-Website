@@ -212,23 +212,26 @@ a:hover {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 720px;
+  max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: center;
 }
 
-.hero-layout--single {
-  max-width: 760px;
-}
-
 @media (min-width: 1024px) {
-  .hero-layout:not(.hero-layout--single) {
-    max-width: 1200px;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 560px);
-    gap: clamp(2rem, 4vw, 3.5rem);
+  .hero-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(380px, min(42vw, 560px));
+    gap: clamp(1.5rem, 3.5vw, 2.75rem);
     align-items: start;
+  }
+
+  /* Nudge copy left and keep the preview column a bit wider */
+  .hero-inner {
+    max-width: min(36rem, 100%);
+    margin-right: auto;
+    justify-self: start;
+    transform: translateX(clamp(-0.5rem, -1.25vw, -1.25rem));
   }
 }
 
