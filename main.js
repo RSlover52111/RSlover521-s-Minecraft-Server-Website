@@ -13,6 +13,18 @@
           liveMapImageSrc: "images/live-map.png",
         };
 
+  function normalizeEmbedUrl(url) {
+    if (!url) return "";
+    var cleaned = String(url).trim();
+    if (!cleaned) return "";
+
+    // Avoid mixed-content blocking (https page embedding http iframe).
+    if (window.location && window.location.protocol === "https:" && cleaned.indexOf("http://") === 0) {
+      return "https://" + cleaned.slice("http://".length);
+    }
+    return cleaned;
+  }
+
   function applySiteConfig() {
     var ip = cfg.serverIp || "";
     document.querySelectorAll(".js-server-ip").forEach(function (el) {
@@ -52,8 +64,22 @@
     }
 
     var blueMapEmbed = document.querySelector("[data-blue-map-embed]");
-    if (blueMapEmbed && cfg.blueMapUrl) {
-      blueMapEmbed.setAttribute("src", cfg.blueMapUrl);
+    var blueMapFallback = document.querySelector("[data-blue-map-fallback]");
+    if (blueMapEmbed) {
+      var url = normalizeEmbedUrl(cfg.blueMapUrl);
+      if (url) {
+        if (blueMapFallback) blueMapFallback.hidden = false;
+
+        blueMapEmbed.addEventListener(
+          "load",
+          function () {
+            if (blueMapFallback) blueMapFallback.hidden = true;
+          },
+          { once: true }
+        );
+
+        blueMapEmbed.setAttribute("src", url);
+      }
     }
   }
 
