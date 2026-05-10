@@ -6,6 +6,7 @@
           serverIp: "mc.rslover521minecraftserver.pro",
           liveMapUrl: "http://rslover521.duckdns.org:3876",
           blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
+          blueMapFallbackImageSrc: "images/bluemap-fallback.png",
           discordUrl: "https://discord.gg/zJguWKyjDt",
           modpackUrl: "#",
           minecraftVersion: "1.20.1",
@@ -65,10 +66,14 @@
 
     var blueMapEmbed = document.querySelector("[data-blue-map-embed]");
     var blueMapFallback = document.querySelector("[data-blue-map-fallback]");
+    var blueMapFallbackImg = document.querySelector("[data-blue-map-fallback-img]");
     if (blueMapEmbed) {
       var url = normalizeEmbedUrl(cfg.blueMapUrl);
       if (url) {
         if (blueMapFallback) blueMapFallback.hidden = false;
+        if (blueMapFallbackImg && cfg.blueMapFallbackImageSrc) {
+          blueMapFallbackImg.setAttribute("src", cfg.blueMapFallbackImageSrc);
+        }
 
         blueMapEmbed.addEventListener(
           "load",

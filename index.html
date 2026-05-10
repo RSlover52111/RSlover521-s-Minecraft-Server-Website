@@ -343,16 +343,14 @@
           </div>
           <div class="spotlight-media live-map-frame" aria-label="Embedded BlueMap preview">
             <div class="embed-fallback" data-blue-map-fallback hidden>
-              <p class="embed-fallback-title">BlueMap preview can’t be embedded here.</p>
-              <p class="embed-fallback-body">
-                Your browser may be blocking the embed (HTTPS/HTTP mixed content) or BlueMap may be sending security
-                headers that prevent iframing. Use the button to open it in a new tab.
-              </p>
-              <p class="embed-fallback-actions">
-                <a class="btn btn-primary btn-small" data-link="blue-map" href="#" target="_blank" rel="noopener noreferrer"
-                  >Open 3D Map</a
-                >
-              </p>
+              <img
+                class="embed-fallback-img"
+                data-blue-map-fallback-img
+                src="images/bluemap-fallback.png"
+                alt="Preview of the BlueMap world map."
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <iframe
               title="BlueMap 3D map"
