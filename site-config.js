@@ -2,7 +2,7 @@
  * Site links and server details — edit this file to update the whole site.
  */
 window.SITE_CONFIG = {
-  serverIp: "rslover521.duckdns.org:25566",
+  serverIp: "mc.rslover521minecraftserver.pro",
   liveMapUrl: "http://rslover521.duckdns.org:3876",
   discordUrl: "https://discord.gg/zJguWKyjDt",
   /** Replace with your CurseForge / Modrinth / direct download when ready */

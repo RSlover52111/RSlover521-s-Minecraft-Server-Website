@@ -3,7 +3,7 @@
     typeof window.SITE_CONFIG === "object" && window.SITE_CONFIG !== null
       ? window.SITE_CONFIG
       : {
-          serverIp: "rslover521.duckdns.org:25566",
+          serverIp: "mc.rslover521minecraftserver.pro",
           liveMapUrl: "http://rslover521.duckdns.org:3876",
           discordUrl: "https://discord.gg/zJguWKyjDt",
           modpackUrl: "#",
