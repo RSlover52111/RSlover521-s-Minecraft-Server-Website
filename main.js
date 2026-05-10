@@ -5,6 +5,7 @@
       : {
           serverIp: "mc.rslover521minecraftserver.pro",
           liveMapUrl: "http://rslover521.duckdns.org:3876",
+          blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
           discordUrl: "https://discord.gg/zJguWKyjDt",
           modpackUrl: "#",
           minecraftVersion: "1.20.1",
@@ -34,6 +35,7 @@
 
     var linkMap = {
       "live-map": cfg.liveMapUrl,
+      "blue-map": cfg.blueMapUrl,
       discord: cfg.discordUrl,
       modpack: cfg.modpackUrl,
     };
@@ -47,6 +49,11 @@
     var mapImg = document.querySelector("[data-live-map-img]");
     if (mapImg && cfg.liveMapImageSrc) {
       mapImg.src = cfg.liveMapImageSrc;
+    }
+
+    var blueMapEmbed = document.querySelector("[data-blue-map-embed]");
+    if (blueMapEmbed && cfg.blueMapUrl) {
+      blueMapEmbed.setAttribute("src", cfg.blueMapUrl);
     }
   }
 

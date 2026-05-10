@@ -28,6 +28,7 @@
         <a href="#story">Story</a>
         <a href="#system">Why here</a>
         <a href="#live-map">Live map</a>
+        <a href="#blue-map">3D map</a>
         <a href="#join">Join</a>
         <a href="#community">Community</a>
       </nav>
@@ -315,6 +316,40 @@
             <p class="live-map-fallback" data-live-map-fallback hidden>
               Add your live map screenshot as <code>images/live-map.png</code> (path set in <code>site-config.js</code>).
             </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BlueMap spotlight -->
+      <section id="blue-map" class="section section-spotlight" aria-label="BlueMap 3D world map">
+        <div class="spotlight-layout">
+          <div class="spotlight-copy">
+            <h2>Explore the World in 3D</h2>
+            <p>
+              BlueMap renders the server as a full 3D world map. Great for scouting build sites, finding rail lines, and
+              showing off projects.
+            </p>
+            <div class="spotlight-actions">
+              <a
+                class="btn btn-primary"
+                data-link="blue-map"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open 3D Map</a
+              >
+              <a class="btn btn-ghost" href="#join">Join the server</a>
+            </div>
+          </div>
+          <div class="spotlight-media live-map-frame" aria-label="Embedded BlueMap preview">
+            <iframe
+              title="BlueMap 3D map"
+              data-blue-map-embed
+              src=""
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              allowfullscreen
+            ></iframe>
           </div>
         </div>
       </section>

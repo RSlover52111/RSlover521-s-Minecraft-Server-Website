@@ -4,6 +4,7 @@
 window.SITE_CONFIG = {
   serverIp: "mc.rslover521minecraftserver.pro",
   liveMapUrl: "http://rslover521.duckdns.org:3876",
+  blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
   discordUrl: "https://discord.gg/zJguWKyjDt",
   /** Replace with your CurseForge / Modrinth / direct download when ready */
   modpackUrl: "#",
