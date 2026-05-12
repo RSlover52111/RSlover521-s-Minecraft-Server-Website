@@ -14,6 +14,7 @@
           forgeVersion: "47.4.0",
           liveMapImageSrc: "images/live-map.png",
           serverStatusRefreshMs: 120000,
+          serverStatusQueryTarget: "",
         };
 
   function normalizeEmbedUrl(url) {
@@ -106,12 +107,48 @@
     }
 
     var apiBase = "https://api.mcstatus.io/v2/status/java/";
+    var mcsrvBase = "https://api.mcsrvstat.us/2/";
     var onlineLabel = "Server Currently Online";
     var offlineLabel = "Server Currently Offline";
+    var manualTarget = (cfg.serverStatusQueryTarget || "").trim();
 
     function applyClasses(state) {
       root.classList.remove("server-status--loading", "server-status--online", "server-status--offline");
       root.classList.add("server-status--" + state);
+    }
+
+    function isOnline(data) {
+      return data && data.online === true;
+    }
+
+    function mcstatusFetch(target) {
+      var url = apiBase + encodeURIComponent(target);
+      return fetch(url, { cache: "no-store" }).then(function (res) {
+        if (!res.ok) throw new Error("bad status");
+        return res.json();
+      });
+    }
+
+    /** SRV / non‑25565 ports (e.g. UltraServers): resolve IP:port, then status APIs can succeed. */
+    function resolveGameEndpoint(hostname) {
+      var url = mcsrvBase + encodeURIComponent(hostname);
+      return fetch(url, { cache: "no-store" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("mcsrvstat http");
+          return res.json();
+        })
+        .then(function (j) {
+          if (!j || !j.ip || typeof j.port !== "number") return null;
+          var ip = String(j.ip).trim();
+          if (!ip) return null;
+          if (ip.indexOf(":") >= 0 && ip.indexOf(".") < 0) {
+            return "[" + ip + "]:" + j.port;
+          }
+          return ip + ":" + j.port;
+        })
+        .catch(function () {
+          return null;
+        });
     }
 
     function fetchOnce() {
@@ -120,14 +157,35 @@
       root.setAttribute("aria-label", "Minecraft server " + host + ": checking");
       root.removeAttribute("title");
 
-      var url = apiBase + encodeURIComponent(host);
-      fetch(url, { cache: "no-store" })
-        .then(function (res) {
-          if (!res.ok) throw new Error("bad status");
-          return res.json();
-        })
+      var chain;
+      if (manualTarget) {
+        chain = mcstatusFetch(manualTarget).then(function (d0) {
+          if (isOnline(d0)) return d0;
+          return mcstatusFetch(host).then(function (d1) {
+            if (isOnline(d1)) return d1;
+            return resolveGameEndpoint(host).then(function (endpoint) {
+              if (!endpoint) return d1;
+              return mcstatusFetch(endpoint).then(function (d2) {
+                return isOnline(d2) ? d2 : d1;
+              });
+            });
+          });
+        });
+      } else {
+        chain = mcstatusFetch(host).then(function (byHost) {
+          if (isOnline(byHost)) return byHost;
+          return resolveGameEndpoint(host).then(function (endpoint) {
+            if (!endpoint) return byHost;
+            return mcstatusFetch(endpoint).then(function (byEndpoint) {
+              return isOnline(byEndpoint) ? byEndpoint : byHost;
+            });
+          });
+        });
+      }
+
+      chain
         .then(function (data) {
-          if (data && data.online === true) {
+          if (isOnline(data)) {
             applyClasses("online");
             textEl.textContent = onlineLabel;
             root.setAttribute("aria-label", "Minecraft server " + host + ": online");
