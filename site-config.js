@@ -8,6 +8,8 @@ window.SITE_CONFIG = {
   /** Shown when the BlueMap iframe can't be embedded */
   blueMapFallbackImageSrc: "images/bluemap-fallback.png",
   discordUrl: "https://discord.gg/zJguWKyjDt",
+  /** How often to refresh the header server status (ms). 0 = check once only. */
+  serverStatusRefreshMs: 120000,
   modpackUrl:
     "https://drive.google.com/file/d/1epZm2OUujBxiAsuTPkKZ0kMfh7dPz29B/view?usp=drive_link",
   minecraftVersion: "1.20.1",

@@ -13,6 +13,7 @@
           minecraftVersion: "1.20.1",
           forgeVersion: "47.4.0",
           liveMapImageSrc: "images/live-map.png",
+          serverStatusRefreshMs: 120000,
         };
 
   function normalizeEmbedUrl(url) {
@@ -89,6 +90,80 @@
     }
   }
 
+  function initServerStatus() {
+    var root = document.querySelector(".js-server-status");
+    var textEl = document.querySelector(".js-server-status-text");
+    if (!root || !textEl) return;
+
+    var host = (cfg.serverIp || "").trim();
+    if (!host) {
+      root.classList.remove("server-status--loading");
+      root.classList.add("server-status--unknown");
+      textEl.textContent = "No IP configured";
+      root.setAttribute("aria-label", "Minecraft server status: no address configured");
+      return;
+    }
+
+    var apiBase = "https://api.mcstatus.io/v2/status/java/";
+
+    function applyClasses(state) {
+      root.classList.remove(
+        "server-status--loading",
+        "server-status--online",
+        "server-status--offline",
+        "server-status--unknown"
+      );
+      root.classList.add("server-status--" + state);
+    }
+
+    function fetchOnce() {
+      applyClasses("loading");
+      textEl.textContent = "Checking…";
+      root.setAttribute("aria-label", "Minecraft server " + host + ": checking");
+
+      var url = apiBase + encodeURIComponent(host);
+      fetch(url, { cache: "no-store" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("bad status");
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.online === true) {
+            applyClasses("online");
+            var po = data.players && typeof data.players.online === "number" ? data.players.online : null;
+            var pm = data.players && typeof data.players.max === "number" ? data.players.max : null;
+            var line = "Online";
+            if (po !== null && pm !== null) {
+              line += " · " + po + "/" + pm;
+            }
+            textEl.textContent = line;
+            root.setAttribute(
+              "aria-label",
+              "Minecraft server " + host + ": online" + (po !== null && pm !== null ? ", " + po + " of " + pm + " players" : "")
+            );
+            root.title = host + " — last checked just now";
+          } else {
+            applyClasses("offline");
+            textEl.textContent = "Offline";
+            root.setAttribute("aria-label", "Minecraft server " + host + ": offline");
+            root.title = host + " — last checked just now";
+          }
+        })
+        .catch(function () {
+          applyClasses("unknown");
+          textEl.textContent = "Status unknown";
+          root.setAttribute("aria-label", "Minecraft server " + host + ": status could not be loaded");
+          root.title = host + " — could not reach status service";
+        });
+    }
+
+    fetchOnce();
+    var refresh = typeof cfg.serverStatusRefreshMs === "number" ? cfg.serverStatusRefreshMs : 120000;
+    if (refresh > 0) {
+      window.setInterval(fetchOnce, refresh);
+    }
+  }
+
   function initLiveMapFallback() {
     var img = document.querySelector("[data-live-map-img]");
     var fallback = document.querySelector("[data-live-map-fallback]");
@@ -140,6 +215,7 @@
   }
 
   applySiteConfig();
+  initServerStatus();
   initLiveMapFallback();
 
   document.querySelectorAll(".js-copy-ip").forEach(function (btn) {

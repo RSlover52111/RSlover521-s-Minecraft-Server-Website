@@ -23,7 +23,18 @@
     <div class="noise" aria-hidden="true"></div>
 
     <header class="site-header">
-      <a class="logo" href="#top">RSlover521 <span class="logo-accent">Minecraft Server</span></a>
+      <div class="header-brand">
+        <a class="logo" href="#top">RSlover521 <span class="logo-accent">Minecraft Server</span></a>
+        <p
+          class="server-status server-status--loading js-server-status"
+          role="status"
+          aria-live="polite"
+          aria-label="Minecraft server status: checking"
+        >
+          <span class="server-status-dot" aria-hidden="true"></span>
+          <span class="server-status-text js-server-status-text">Checking…</span>
+        </p>
+      </div>
       <nav class="nav" aria-label="Primary">
         <a href="#story">Story</a>
         <a href="#system">Why here</a>
