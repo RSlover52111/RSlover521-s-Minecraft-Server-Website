@@ -8,7 +8,8 @@
           blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
           blueMapFallbackImageSrc: "images/bluemap-fallback.png",
           discordUrl: "https://discord.gg/zJguWKyjDt",
-          modpackUrl: "#",
+          modpackUrl:
+            "https://drive.google.com/file/d/1epZm2OUujBxiAsuTPkKZ0kMfh7dPz29B/view?usp=drive_link",
           minecraftVersion: "1.20.1",
           forgeVersion: "47.4.0",
           liveMapImageSrc: "images/live-map.png",
