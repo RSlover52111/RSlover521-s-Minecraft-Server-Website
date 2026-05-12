@@ -4,7 +4,7 @@
       ? window.SITE_CONFIG
       : {
           serverIp: "mc.rslover521minecraftserver.pro",
-          liveMapUrl: "http://rslover521.duckdns.org:3876",
+          liveMapUrl: "http://createtrackmap.rslover521minecraftserver.pro:12010/",
           blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
           blueMapFallbackImageSrc: "images/bluemap-fallback.png",
           discordUrl: "https://discord.gg/zJguWKyjDt",
