@@ -71,99 +71,31 @@ a:hover {
   border-bottom: 1px solid var(--border);
 }
 
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem 1rem;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-
 .server-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
   margin: 0;
-  padding: 0.28rem 0.6rem 0.28rem 0.5rem;
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.server-status-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.server-status-dot {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: var(--text-muted);
   flex-shrink: 0;
+  max-width: min(100%, 14rem);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-align: right;
+  color: var(--text-muted);
 }
 
-.server-status--loading .server-status-dot {
-  animation: server-status-pulse 1.1s ease-in-out infinite;
+.server-status--loading {
+  color: var(--text-muted);
 }
 
 .server-status--online {
-  border-color: rgba(92, 224, 160, 0.35);
-}
-
-.server-status--online .server-status-dot {
-  background: #5ce0a0;
-  box-shadow: 0 0 10px rgba(92, 224, 160, 0.45);
-}
-
-.server-status--online .server-status-text {
-  color: #c4f0dc;
+  color: #5ce0a0;
+  text-shadow: 0 0 20px rgba(92, 224, 160, 0.35);
 }
 
 .server-status--offline {
-  border-color: rgba(232, 93, 108, 0.35);
-}
-
-.server-status--offline .server-status-dot {
-  background: #e85d6c;
-  box-shadow: 0 0 10px rgba(232, 93, 108, 0.35);
-}
-
-.server-status--offline .server-status-text {
-  color: #f5bcc3;
-}
-
-.server-status--unknown {
-  border-color: rgba(201, 162, 39, 0.35);
-}
-
-.server-status--unknown .server-status-dot {
-  background: #d4b84a;
-  box-shadow: 0 0 8px rgba(212, 184, 74, 0.35);
-}
-
-.server-status--unknown .server-status-text {
-  color: #e8d89a;
-}
-
-@keyframes server-status-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: scale(0.92);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  color: #e85d6c;
+  text-shadow: 0 0 18px rgba(232, 93, 108, 0.3);
 }
 
 .logo {
@@ -173,6 +105,7 @@ a:hover {
   letter-spacing: 0.08em;
   color: var(--text);
   text-decoration: none;
+  min-width: 0;
 }
 
 .logo:hover {
@@ -270,8 +203,8 @@ a:hover {
   }
 
   .server-status {
-    font-size: 0.65rem;
-    padding: 0.22rem 0.5rem 0.22rem 0.42rem;
+    font-size: 0.72rem;
+    max-width: 9.5rem;
   }
 }
 

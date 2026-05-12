@@ -98,21 +98,19 @@
     var host = (cfg.serverIp || "").trim();
     if (!host) {
       root.classList.remove("server-status--loading");
-      root.classList.add("server-status--unknown");
-      textEl.textContent = "No IP configured";
+      root.classList.add("server-status--offline");
+      textEl.textContent = "Server Currently Offline";
       root.setAttribute("aria-label", "Minecraft server status: no address configured");
+      root.removeAttribute("title");
       return;
     }
 
     var apiBase = "https://api.mcstatus.io/v2/status/java/";
+    var onlineLabel = "Server Currently Online";
+    var offlineLabel = "Server Currently Offline";
 
     function applyClasses(state) {
-      root.classList.remove(
-        "server-status--loading",
-        "server-status--online",
-        "server-status--offline",
-        "server-status--unknown"
-      );
+      root.classList.remove("server-status--loading", "server-status--online", "server-status--offline");
       root.classList.add("server-status--" + state);
     }
 
@@ -120,6 +118,7 @@
       applyClasses("loading");
       textEl.textContent = "Checking…";
       root.setAttribute("aria-label", "Minecraft server " + host + ": checking");
+      root.removeAttribute("title");
 
       var url = apiBase + encodeURIComponent(host);
       fetch(url, { cache: "no-store" })
@@ -130,30 +129,18 @@
         .then(function (data) {
           if (data && data.online === true) {
             applyClasses("online");
-            var po = data.players && typeof data.players.online === "number" ? data.players.online : null;
-            var pm = data.players && typeof data.players.max === "number" ? data.players.max : null;
-            var line = "Online";
-            if (po !== null && pm !== null) {
-              line += " · " + po + "/" + pm;
-            }
-            textEl.textContent = line;
-            root.setAttribute(
-              "aria-label",
-              "Minecraft server " + host + ": online" + (po !== null && pm !== null ? ", " + po + " of " + pm + " players" : "")
-            );
-            root.title = host + " — last checked just now";
+            textEl.textContent = onlineLabel;
+            root.setAttribute("aria-label", "Minecraft server " + host + ": online");
           } else {
             applyClasses("offline");
-            textEl.textContent = "Offline";
+            textEl.textContent = offlineLabel;
             root.setAttribute("aria-label", "Minecraft server " + host + ": offline");
-            root.title = host + " — last checked just now";
           }
         })
         .catch(function () {
-          applyClasses("unknown");
-          textEl.textContent = "Status unknown";
-          root.setAttribute("aria-label", "Minecraft server " + host + ": status could not be loaded");
-          root.title = host + " — could not reach status service";
+          applyClasses("offline");
+          textEl.textContent = offlineLabel;
+          root.setAttribute("aria-label", "Minecraft server " + host + ": offline or status unavailable");
         });
     }
 
