@@ -1,8 +1,273 @@
 (function () {
+  var cfg =
+    typeof window.SITE_CONFIG === "object" && window.SITE_CONFIG !== null
+      ? window.SITE_CONFIG
+      : {
+          serverIp: "mc.rslover521minecraftserver.pro",
+          liveMapUrl: "http://createtrackmap.rslover521minecraftserver.pro:12010/",
+          blueMapUrl: "http://bluemap.rslover521minecraftserver.pro:12009/",
+          blueMapFallbackImageSrc: "images/bluemap-fallback.png",
+          discordUrl: "https://discord.gg/zJguWKyjDt",
+          modpackUrl:
+            "https://drive.google.com/file/d/1epZm2OUujBxiAsuTPkKZ0kMfh7dPz29B/view?usp=drive_link",
+          minecraftVersion: "1.20.1",
+          forgeVersion: "47.4.0",
+          liveMapImageSrc: "images/live-map.png",
+          serverStatusRefreshMs: 120000,
+          serverStatusQueryTarget: "",
+        };
+
+  function normalizeEmbedUrl(url) {
+    if (!url) return "";
+    var cleaned = String(url).trim();
+    if (!cleaned) return "";
+
+    // Avoid mixed-content blocking (https page embedding http iframe).
+    if (window.location && window.location.protocol === "https:" && cleaned.indexOf("http://") === 0) {
+      return "https://" + cleaned.slice("http://".length);
+    }
+    return cleaned;
+  }
+
+  function applySiteConfig() {
+    var ip = cfg.serverIp || "";
+    document.querySelectorAll(".js-server-ip").forEach(function (el) {
+      el.textContent = ip;
+    });
+
+    var verLabel = document.querySelector(".js-version-label");
+    if (verLabel && cfg.minecraftVersion && cfg.forgeVersion) {
+      verLabel.textContent = "Minecraft " + cfg.minecraftVersion + ", Forge " + cfg.forgeVersion;
+    }
+
+    var mcBadge = document.querySelector(".js-mc-badge");
+    if (mcBadge && cfg.minecraftVersion) {
+      mcBadge.textContent = cfg.minecraftVersion;
+    }
+    var forgeBadge = document.querySelector(".js-forge-badge");
+    if (forgeBadge && cfg.forgeVersion) {
+      forgeBadge.textContent = cfg.forgeVersion;
+    }
+
+    var linkMap = {
+      "live-map": cfg.liveMapUrl,
+      "blue-map": cfg.blueMapUrl,
+      discord: cfg.discordUrl,
+      modpack: cfg.modpackUrl,
+    };
+    document.querySelectorAll("[data-link]").forEach(function (el) {
+      var key = el.getAttribute("data-link");
+      if (key && linkMap[key]) {
+        el.setAttribute("href", linkMap[key]);
+      }
+    });
+
+    var mapImg = document.querySelector("[data-live-map-img]");
+    if (mapImg && cfg.liveMapImageSrc) {
+      mapImg.src = cfg.liveMapImageSrc;
+    }
+
+    var blueMapEmbed = document.querySelector("[data-blue-map-embed]");
+    var blueMapFallback = document.querySelector("[data-blue-map-fallback]");
+    var blueMapFallbackImg = document.querySelector("[data-blue-map-fallback-img]");
+    if (blueMapEmbed) {
+      var url = normalizeEmbedUrl(cfg.blueMapUrl);
+      if (url) {
+        if (blueMapFallback) blueMapFallback.hidden = false;
+        if (blueMapFallbackImg && cfg.blueMapFallbackImageSrc) {
+          blueMapFallbackImg.setAttribute("src", cfg.blueMapFallbackImageSrc);
+        }
+
+        blueMapEmbed.addEventListener(
+          "load",
+          function () {
+            if (blueMapFallback) blueMapFallback.hidden = true;
+          },
+          { once: true }
+        );
+
+        blueMapEmbed.setAttribute("src", url);
+      }
+    }
+  }
+
+  function initServerStatus() {
+    var root = document.querySelector(".js-server-status");
+    var textEl = document.querySelector(".js-server-status-text");
+    if (!root || !textEl) return;
+
+    var host = (cfg.serverIp || "").trim();
+    if (!host) {
+      root.classList.remove("server-status--loading");
+      root.classList.add("server-status--offline");
+      textEl.textContent = "Server Currently Offline";
+      root.setAttribute("aria-label", "Minecraft server status: no address configured");
+      root.removeAttribute("title");
+      return;
+    }
+
+    var apiBase = "https://api.mcstatus.io/v2/status/java/";
+    var mcsrvBase = "https://api.mcsrvstat.us/2/";
+    var onlineLabel = "Server Currently Online";
+    var offlineLabel = "Server Currently Offline";
+    var manualTarget = (cfg.serverStatusQueryTarget || "").trim();
+
+    function applyClasses(state) {
+      root.classList.remove("server-status--loading", "server-status--online", "server-status--offline");
+      root.classList.add("server-status--" + state);
+    }
+
+    function isOnline(data) {
+      return data && data.online === true;
+    }
+
+    function mcstatusFetch(target) {
+      var url = apiBase + encodeURIComponent(target);
+      return fetch(url, { cache: "no-store" }).then(function (res) {
+        if (!res.ok) throw new Error("bad status");
+        return res.json();
+      });
+    }
+
+    /** SRV / non‑25565 ports (e.g. UltraServers): resolve IP:port, then status APIs can succeed. */
+    function resolveGameEndpoint(hostname) {
+      var url = mcsrvBase + encodeURIComponent(hostname);
+      return fetch(url, { cache: "no-store" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("mcsrvstat http");
+          return res.json();
+        })
+        .then(function (j) {
+          if (!j || !j.ip || typeof j.port !== "number") return null;
+          var ip = String(j.ip).trim();
+          if (!ip) return null;
+          if (ip.indexOf(":") >= 0 && ip.indexOf(".") < 0) {
+            return "[" + ip + "]:" + j.port;
+          }
+          return ip + ":" + j.port;
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+
+    function fetchOnce() {
+      applyClasses("loading");
+      textEl.textContent = "Checking…";
+      root.setAttribute("aria-label", "Minecraft server " + host + ": checking");
+      root.removeAttribute("title");
+
+      var chain;
+      if (manualTarget) {
+        chain = mcstatusFetch(manualTarget).then(function (d0) {
+          if (isOnline(d0)) return d0;
+          return mcstatusFetch(host).then(function (d1) {
+            if (isOnline(d1)) return d1;
+            return resolveGameEndpoint(host).then(function (endpoint) {
+              if (!endpoint) return d1;
+              return mcstatusFetch(endpoint).then(function (d2) {
+                return isOnline(d2) ? d2 : d1;
+              });
+            });
+          });
+        });
+      } else {
+        chain = mcstatusFetch(host).then(function (byHost) {
+          if (isOnline(byHost)) return byHost;
+          return resolveGameEndpoint(host).then(function (endpoint) {
+            if (!endpoint) return byHost;
+            return mcstatusFetch(endpoint).then(function (byEndpoint) {
+              return isOnline(byEndpoint) ? byEndpoint : byHost;
+            });
+          });
+        });
+      }
+
+      chain
+        .then(function (data) {
+          if (isOnline(data)) {
+            applyClasses("online");
+            textEl.textContent = onlineLabel;
+            root.setAttribute("aria-label", "Minecraft server " + host + ": online");
+          } else {
+            applyClasses("offline");
+            textEl.textContent = offlineLabel;
+            root.setAttribute("aria-label", "Minecraft server " + host + ": offline");
+          }
+        })
+        .catch(function () {
+          applyClasses("offline");
+          textEl.textContent = offlineLabel;
+          root.setAttribute("aria-label", "Minecraft server " + host + ": offline or status unavailable");
+        });
+    }
+
+    fetchOnce();
+    var refresh = typeof cfg.serverStatusRefreshMs === "number" ? cfg.serverStatusRefreshMs : 120000;
+    if (refresh > 0) {
+      window.setInterval(fetchOnce, refresh);
+    }
+  }
+
+  function initLiveMapFallback() {
+    var img = document.querySelector("[data-live-map-img]");
+    var fallback = document.querySelector("[data-live-map-fallback]");
+    var frame = document.querySelector("[data-live-map-frame]");
+    if (!img || !fallback || !frame) return;
+
+    function showFallback() {
+      img.style.display = "none";
+      fallback.hidden = false;
+      frame.classList.add("live-map-frame--fallback");
+    }
+
+    img.addEventListener("error", showFallback);
+    if (img.complete && img.naturalWidth === 0) {
+      showFallback();
+    }
+  }
+
+  function copyServerIp(triggerBtn) {
+    var ip = (cfg.serverIp || "").trim();
+    if (!ip) return;
+
+    function feedback() {
+      if (!triggerBtn) return;
+      var prev = triggerBtn.getAttribute("data-prev-label") || triggerBtn.textContent;
+      if (!triggerBtn.hasAttribute("data-prev-label")) {
+        triggerBtn.setAttribute("data-prev-label", prev);
+      }
+      triggerBtn.textContent = "Copied!";
+      triggerBtn.classList.add("copied");
+      window.setTimeout(function () {
+        triggerBtn.textContent = triggerBtn.getAttribute("data-prev-label") || "Copy IP";
+        triggerBtn.classList.remove("copied");
+      }, 2000);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ip).then(feedback).catch(function () {
+        window.prompt("Copy this address:", ip);
+      });
+    } else {
+      window.prompt("Copy this address:", ip);
+    }
+  }
+
   var yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
   }
+
+  applySiteConfig();
+  initServerStatus();
+  initLiveMapFallback();
+
+  document.querySelectorAll(".js-copy-ip").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      copyServerIp(btn);
+    });
+  });
 
   var carousels = document.querySelectorAll("[data-carousel]");
   if (carousels.length) {
@@ -80,16 +345,18 @@
         }, autoplayMs);
       }
 
-      if (btnPrev) btnPrev.addEventListener("click", function () {
-        go(-1);
-        stopAutoplay();
-        startAutoplay();
-      });
-      if (btnNext) btnNext.addEventListener("click", function () {
-        go(1);
-        stopAutoplay();
-        startAutoplay();
-      });
+      if (btnPrev)
+        btnPrev.addEventListener("click", function () {
+          go(-1);
+          stopAutoplay();
+          startAutoplay();
+        });
+      if (btnNext)
+        btnNext.addEventListener("click", function () {
+          go(1);
+          stopAutoplay();
+          startAutoplay();
+        });
 
       dots.forEach(function (dot, idx) {
         dot.addEventListener("click", function () {
@@ -125,54 +392,4 @@
       startAutoplay();
     });
   }
-
-  var copyBtn = document.getElementById("copy-ip");
-  var ipEl = document.getElementById("server-ip");
-  if (copyBtn && ipEl) {
-    copyBtn.addEventListener("click", function () {
-      var text = ipEl.textContent.trim();
-      function done() {
-        copyBtn.textContent = "Copied!";
-        copyBtn.classList.add("copied");
-        setTimeout(function () {
-          copyBtn.textContent = "Copy";
-          copyBtn.classList.remove("copied");
-        }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () {
-          window.prompt("Copy this address:", text);
-        });
-      } else {
-        window.prompt("Copy this address:", text);
-      }
-    });
-  }
-
-  // Global copyIP function for hero buttons
-  window.copyIP = function(btn) {
-    var ipEl = document.getElementById("server-ip-hero");
-    if (ipEl) {
-      var text = ipEl.textContent.trim();
-      var originalText = btn.textContent;
-      function done() {
-        btn.textContent = "Copied!";
-        btn.classList.add("copied");
-        setTimeout(function () {
-          btn.textContent = originalText;
-          // Keep the copied class for permanent color change
-          // btn.classList.remove("copied");
-          // Navigate after feedback
-          document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
-        }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () {
-          window.prompt("Copy this address:", text);
-        });
-      } else {
-        window.prompt("Copy this address:", text);
-      }
-    }
-  };
 })();
